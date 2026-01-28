@@ -50,21 +50,28 @@ class AuthController extends Controller
         ], 401);
     }
 
+     // Create token
+    $token = $user->createToken('auth_token')->plainTextToken;
+
     return response()->json([
         'status' => true,
         'message' => 'Login successful',
-        'user' => $user
+        'user' => $user,
+        'token' => $token
     ]);
 }
 
 
     // ---------- LOGOUT ----------
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::logout();
+        // Revoke the token that was used to authenticate the current request
+        $request->user()->currentAccessToken()->delete();
+
         return response()->json([
             'status' => true,
-            'message' => 'Logged out'
+            'message' => 'Logged out successfully'
         ]);
     }
+
 }
