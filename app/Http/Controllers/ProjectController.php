@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
+    public function index(){
+        $projects = Project::where('user_id', Auth::id())->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $projects
+        ], 200);
+    }
     // CREATE PROJECT
     public function store(Request $request)
     {
