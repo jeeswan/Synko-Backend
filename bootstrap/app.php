@@ -14,7 +14,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
-        $middleware->append(HandleCors::class);
+        $middleware->append(HandleCors::class, [
+            'paths' => ['api/*', 'sanctum/csrf-cookie'],
+            'allowed_methods' => ['*'],
+            'allowed_origins' => ['http://localhost:5173'],
+            'allowed_headers' => ['*'],
+            'supports_credentials' => true,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
