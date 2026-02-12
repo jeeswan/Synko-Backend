@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Task;   // 👈 ADD THIS
 
 class User extends Authenticatable
 {
@@ -22,4 +23,8 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class);
+    }
 }
