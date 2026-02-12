@@ -50,14 +50,12 @@ class AuthController extends Controller
         ], 401);
     }
 
-     // Create token
-    $token = $user->createToken('auth_token')->plainTextToken;
+    Auth::login($user); // <- important for SPA cookie-based session
 
     return response()->json([
         'status' => true,
         'message' => 'Login successful',
-        'user' => $user,
-        'token' => $token
+        'user' => $user
     ]);
 }
 
