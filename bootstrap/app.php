@@ -14,7 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
-        $middleware->append(HandleCors::class);
+        $middleware->append(HandleCors::class, [
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
