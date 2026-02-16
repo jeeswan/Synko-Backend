@@ -13,27 +13,33 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
             'priority' => 'required|in:Low,Medium,High,Urgent',
-            'due_date' => 'nullable|date'
+            'status' => 'nullable|in:To Do,In Progress,Review,Done',
+            'due_date' => 'nullable|date',
+            'description' => 'nullable|string',
+            'user_ids' => 'nullable|array',
+            'user_ids.*' => 'exists:users,id',
+            'label_ids' => 'nullable|array',
+            'label_ids.*' => 'exists:labels,id',
         ]);
 
         $task = Task::create([
             'name' => $request->name,
-            'description' => $request->description,
+            'description' => $request->description ?? null,
             'priority' => $request->priority,
             'status' => $request->status ?? 'To Do',
             'due_date' => $request->due_date,
         ]);
 
-        // Attach users (assignees)
-        if ($request->user_ids) {
-            $task->users()->attach($request->user_ids);
+        // Attach users safely
+        if ($request->has('user_ids')) {
+            $task->users()->sync($request->user_ids);
         }
 
-        // Attach labels
-        if ($request->label_ids) {
-            $task->labels()->attach($request->label_ids);
+        // Attach labels safely
+        if ($request->has('label_ids')) {
+            $task->labels()->sync($request->label_ids);
         }
 
         return response()->json([
@@ -55,21 +61,27 @@ class TaskController extends Controller
     {
         $task = Task::findOrFail($id);
 
-        $task->update([
-            'name' => $request->name ?? $task->name,
-            'description' => $request->description ?? $task->description,
-            'priority' => $request->priority ?? $task->priority,
-            'status' => $request->status ?? $task->status,
-            'due_date' => $request->due_date ?? $task->due_date,
+        $request->validate([
+            'name' => 'nullable|string|max:255',
+            'priority' => 'nullable|in:Low,Medium,High,Urgent',
+            'status' => 'nullable|in:To Do,In Progress,Review,Done',
+            'due_date' => 'nullable|date',
+            'description' => 'nullable|string',
+            'user_ids' => 'nullable|array',
+            'user_ids.*' => 'exists:users,id',
+            'label_ids' => 'nullable|array',
+            'label_ids.*' => 'exists:labels,id',
         ]);
 
+        $task->update($request->only('name', 'description', 'priority', 'status', 'due_date'));
+
         // Sync users
-        if ($request->user_ids) {
+        if ($request->has('user_ids')) {
             $task->users()->sync($request->user_ids);
         }
 
         // Sync labels
-        if ($request->label_ids) {
+        if ($request->has('label_ids')) {
             $task->labels()->sync($request->label_ids);
         }
 

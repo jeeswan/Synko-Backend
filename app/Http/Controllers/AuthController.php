@@ -35,35 +35,34 @@ class AuthController extends Controller
 
     // ---------- LOGIN ----------
     public function login(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-    $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-    if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid credentials'
+            ], 401);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
-            'status' => false,
-            'message' => 'Invalid credentials'
-        ], 401);
+            'status' => true,
+            'message' => 'Login successful',
+            'user' => $user,
+            'token' => $token
+        ]);
     }
-
-    Auth::login($user); // <- important for SPA cookie-based session
-
-    return response()->json([
-        'status' => true,
-        'message' => 'Login successful',
-        'user' => $user
-    ]);
-}
-
 
     // ---------- LOGOUT ----------
     public function logout(Request $request)
     {
-        // Revoke the token that was used to authenticate the current request
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
@@ -71,5 +70,4 @@ class AuthController extends Controller
             'message' => 'Logged out successfully'
         ]);
     }
-
 }
