@@ -3,11 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\TaskController;
+use App\Http\Controllers\AuthController;
 
 // Auth routes
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
 
 // Get authenticated user
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -16,9 +17,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Projects routes (require auth)
 Route::middleware('auth:sanctum')->group(function () {
-
-    Route::post('/logout', [AuthController::class, 'logout']);
-
     // Task Routes
     Route::post('/tasks', [TaskController::class, 'store']);
     Route::get('/tasks', [TaskController::class, 'index']);
@@ -27,5 +25,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Project
     Route::post('/projects', [ProjectController::class, 'store']);
+    Route::get('/projects', [ProjectController::class, 'index']);
 });
 
