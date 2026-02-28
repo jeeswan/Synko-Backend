@@ -26,10 +26,13 @@ class AuthController extends Controller
             'password'   => Hash::make($request->password),
         ]);
 
+        $token = $user->createToken($request->email);
+
         return response()->json([
             'status' => true,
             'message' => 'User registered successfully',
-            'user' => $user
+            'user' => $user,
+            'token' => $token->plainTextToken
         ], 201);
     }
 
@@ -50,13 +53,13 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken($user->email);
 
         return response()->json([
             'status' => true,
             'message' => 'Login successful',
             'user' => $user,
-            'token' => $token
+            'token' => $token->plainTextToken
         ]);
     }
 

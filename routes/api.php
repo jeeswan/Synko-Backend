@@ -9,12 +9,12 @@ use Illuminate\Http\Request;
 // Auth routes
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 // Get authenticated user
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::get('/user', function (Request $request) {
     return $request->user();
-});
+})->middleware('auth:sanctum');
 
 // Projects routes (require auth)
 Route::middleware('auth:sanctum')->group(function () {
@@ -27,5 +27,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Project
     Route::post('/projects', [ProjectController::class, 'store']);
     Route::get('/projects', [ProjectController::class, 'index']);
+    Route::put('/projects/{id}', [ProjectController::class, 'update']);
+    Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
+    Route::get('/projects/{id}', [ProjectController::class, 'show']);
 });
 
