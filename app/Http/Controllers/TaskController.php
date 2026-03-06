@@ -13,6 +13,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'project_id' => 'required|exists:projects,id',
             'name' => 'required|string|max:255',
             'priority' => 'required|in:Low,Medium,High,Urgent',
             'status' => 'nullable|in:To Do,In Progress,Review,Done',
@@ -25,6 +26,7 @@ class TaskController extends Controller
         ]);
 
         $task = Task::create([
+            'project_id' => $request->project_id,
             'name' => $request->name,
             'description' => $request->description ?? null,
             'priority' => $request->priority,
@@ -48,10 +50,12 @@ class TaskController extends Controller
         ], 201);
     }
 
-    // ✅ GET ALL TASKS
-    public function index()
+    // ✅ GET ALL TASKS OF A PROJECT
+    public function index($projectId)
     {
-        $tasks = Task::with('users', 'labels')->get();
+        $tasks = Task::where('project_id', $projectId)
+            ->with('users','labels')
+            ->get();
 
         return response()->json($tasks);
     }
@@ -62,6 +66,7 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
 
         $request->validate([
+            'project_id' => 'exists:projects,id',
             'name' => 'nullable|string|max:255',
             'priority' => 'nullable|in:Low,Medium,High,Urgent',
             'status' => 'nullable|in:To Do,In Progress,Review,Done',

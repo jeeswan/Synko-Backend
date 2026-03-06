@@ -19,8 +19,8 @@ Route::get('/user', function (Request $request) {
 // Projects routes (require auth)
 Route::middleware('auth:sanctum')->group(function () {
     // Task Routes
-    Route::post('/tasks', [TaskController::class, 'store']);
-    Route::get('/tasks', [TaskController::class, 'index']);
+    Route::post('/projects/{project}/tasks', [TaskController::class, 'store']);
+    Route::get('/projects/{project}/tasks', [TaskController::class, 'index']);
     Route::put('/tasks/{id}', [TaskController::class, 'update']);
     Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
 
