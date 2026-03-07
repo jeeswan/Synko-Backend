@@ -38,4 +38,17 @@ class ProjectController extends Controller
             'data' => $project
         ], 201);
     }
+
+    public function toggleStar($id)
+    {
+        $project = Project::findOrFail($id);
+
+        $project->is_starred = !$project->is_starred;
+        $project->save();
+
+        return response()->json([
+            'message' => 'Star updated',
+            'data' => $project
+        ]);
+    }
 }

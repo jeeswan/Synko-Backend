@@ -13,7 +13,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 // Get authenticated user
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user();
+    return [
+        'id' => $user->id,
+        'name' => $user->first_name . ' ' . $user->last_name,
+        'email' => $user->email
+    ];
 })->middleware('auth:sanctum');
 
 // Projects routes (require auth)
@@ -30,5 +35,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/projects/{id}', [ProjectController::class, 'update']);
     Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
     Route::get('/projects/{id}', [ProjectController::class, 'show']);
+    Route::patch('/projects/{id}/star', [ProjectController::class, 'toggleStar']);
 });
 
