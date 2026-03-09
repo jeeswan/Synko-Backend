@@ -54,6 +54,7 @@ class TaskController extends Controller
     public function index($projectId)
     {
         $tasks = Task::where('project_id', $projectId)
+            ->where('is_archived', false)
             ->with('users','labels')
             ->get();
 
@@ -94,6 +95,13 @@ class TaskController extends Controller
             'message' => 'Task updated successfully',
             'data' => $task->load('users', 'labels')
         ]);
+    }
+
+    // ✅ ARCHIVE TASK
+    public function archive(Task $task)
+    {
+        $task->update(['is_archived' => true]);
+        return response()->json(['message' => 'Task archived', 'data' => $task]);
     }
 
     // ✅ DELETE TASK

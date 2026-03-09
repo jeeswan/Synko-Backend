@@ -12,6 +12,7 @@ class Task extends Model
         'description',
         'priority',
         'status',
+        'is_archived',
         'due_date'
     ];
 

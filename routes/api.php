@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/projects/{project}/tasks', [TaskController::class, 'index']);
     Route::put('/tasks/{id}', [TaskController::class, 'update']);
     Route::delete('/tasks/{id}', [TaskController::class, 'destroy']);
+    Route::patch('/tasks/{task}/archive', [TaskController::class, 'archive']);
 
     // Project
     Route::post('/projects', [ProjectController::class, 'store']);
@@ -36,5 +37,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
     Route::get('/projects/{id}', [ProjectController::class, 'show']);
     Route::patch('/projects/{id}/star', [ProjectController::class, 'toggleStar']);
+    Route::patch('/projects/{id}/archive', [ProjectController::class, 'archive']);
 });
 

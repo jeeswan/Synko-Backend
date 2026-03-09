@@ -14,7 +14,8 @@ class Project extends Model
         'name',
         'description',
         'color',
-        'is_starred'
+        'is_starred',
+        'is_archived'
     ];
 
     public function tasks()

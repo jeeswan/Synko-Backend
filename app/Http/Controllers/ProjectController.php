@@ -51,4 +51,29 @@ class ProjectController extends Controller
             'data' => $project
         ]);
     }
+
+    public function archive($id)
+    {
+        $project = Project::findOrFail($id);
+
+        $project->update([
+            'is_archived' => true
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Project archived successfully',
+            'data' => $project
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $project = Project::findOrFail($id);
+        $project->delete();
+
+        return response()->json([
+            'message' => 'Project deleted'
+        ]);
+    }
 }
