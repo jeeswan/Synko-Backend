@@ -57,12 +57,12 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
 
         $project->update([
-            'is_archived' => true
+            'is_archived' => !$project->is_archived
         ]);
 
         return response()->json([
             'success' => true,
-            'message' => 'Project archived successfully',
+            'message' => 'Project archive status updated successfully',
             'data' => $project
         ]);
     }

@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\LabelController;
 use Illuminate\Http\Request;
 
 // Auth routes
@@ -23,6 +25,13 @@ Route::get('/user', function (Request $request) {
 
 // Projects routes (require auth)
 Route::middleware('auth:sanctum')->group(function () {
+    // Users
+    Route::get('/users/search', [UserController::class, 'search']);
+
+    // Labels
+    Route::get('/labels', [LabelController::class, 'index']);
+    Route::post('/labels', [LabelController::class, 'store']);
+
     // Task Routes
     Route::post('/projects/{project}/tasks', [TaskController::class, 'store']);
     Route::get('/projects/{project}/tasks', [TaskController::class, 'index']);

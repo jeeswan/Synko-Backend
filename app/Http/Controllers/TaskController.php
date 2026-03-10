@@ -100,8 +100,8 @@ class TaskController extends Controller
     // ✅ ARCHIVE TASK
     public function archive(Task $task)
     {
-        $task->update(['is_archived' => true]);
-        return response()->json(['message' => 'Task archived', 'data' => $task]);
+        $task->update(['is_archived' => !$task->is_archived]);
+        return response()->json(['message' => 'Task archive status updated', 'data' => $task]);
     }
 
     // ✅ DELETE TASK
