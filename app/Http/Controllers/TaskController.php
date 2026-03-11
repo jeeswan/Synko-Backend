@@ -32,6 +32,7 @@ class TaskController extends Controller
             'priority' => $request->priority,
             'status' => $request->status ?? 'To Do',
             'due_date' => $request->due_date,
+            'created_by' => auth()->id()
         ]);
 
         // Attach users safely
@@ -55,7 +56,7 @@ class TaskController extends Controller
     {
         $tasks = Task::where('project_id', $projectId)
             ->where('is_archived', false)
-            ->with('users','labels')
+            ->with('users','labels','project')
             ->get();
 
         return response()->json($tasks);

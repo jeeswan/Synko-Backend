@@ -47,5 +47,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/projects/{id}', [ProjectController::class, 'show']);
     Route::patch('/projects/{id}/star', [ProjectController::class, 'toggleStar']);
     Route::patch('/projects/{id}/archive', [ProjectController::class, 'archive']);
+    Route::post('/projects/{project}/assign', [ProjectController::class, 'assignUser']);
 });
 

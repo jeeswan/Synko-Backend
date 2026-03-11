@@ -13,7 +13,8 @@ class Task extends Model
         'priority',
         'status',
         'is_archived',
-        'due_date'
+        'due_date',
+        'created_by'
     ];
 
     public function project()

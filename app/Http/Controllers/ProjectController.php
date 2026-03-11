@@ -8,13 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
-    public function index(){
-        $projects = Project::where('user_id', Auth::id())->get();
+    public function index()
+    {
+        $user = auth()->user();
+
+        $projects = Project::where('user_id', $user->id) 
+            ->orWhereHas('users', fn($q) => $q->where('users.id', $user->id)) 
+            ->orWhereHas('tasks.users', fn($q) => $q->where('users.id', $user->id)) 
+            ->get();
 
         return response()->json([
             'status' => true,
             'data' => $projects
-        ], 200);
+        ]);
     }
     // CREATE PROJECT
     public function store(Request $request)
@@ -64,6 +70,15 @@ class ProjectController extends Controller
             'success' => true,
             'message' => 'Project archive status updated successfully',
             'data' => $project
+        ]);
+    }
+
+    public function assignUser(Request $request, Project $project)
+    {
+        $project->users()->attach($request->user_id);
+
+        return response()->json([
+            'message' => 'User assigned to project'
         ]);
     }
 
