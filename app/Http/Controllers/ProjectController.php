@@ -12,11 +12,11 @@ class ProjectController extends Controller
     {
         $user = auth()->user();
 
-        $projects = Project::where('user_id', $user->id) 
-            ->orWhereHas('users', fn($q) => $q->where('users.id', $user->id)) 
-            ->orWhereHas('tasks.users', fn($q) => $q->where('users.id', $user->id)) 
+        $projects = Project::where('user_id', $user->id)
+            ->orWhereHas('users', fn($q) => $q->where('users.id', $user->id))
+            ->orWhereHas('tasks.users', fn($q) => $q->where('users.id', $user->id))
+            ->distinct()
             ->get();
-
         return response()->json([
             'status' => true,
             'data' => $projects
