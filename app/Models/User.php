@@ -6,7 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Task;   // 👈 ADD THIS
+use App\Models\Task; 
 
 class User extends Authenticatable
 {
