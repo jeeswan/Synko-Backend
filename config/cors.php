@@ -6,7 +6,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://synko-frontend.vercel.app'],  // <-- your Vite frontend
+    'allowed_origins' => ['https://synko-frontend.vercel.app', 'https://synko-frontend-git-main-jeeswan-bajracharyas-projects.vercel.app',],  // <-- your Vite frontend
 
     'allowed_origins_patterns' => [],
 
